@@ -14,6 +14,7 @@ test.describe("Vercel Store - AI Browser Regression Suite (Passmark)", () => {
       test,
       expect,
       userFlow: "Vercel Store - Guest Product Checkout",
+      executionId: "vercel-store-e2e-checkout-run",
       steps: [
         {
           description: "Click on the first product card featured on the homepage",
@@ -31,11 +32,17 @@ test.describe("Vercel Store - AI Browser Regression Suite (Passmark)", () => {
         {
           description: "Click the 'Proceed to Checkout' button inside the cart drawer",
         },
+        {
+          description:
+            "Enter customer email into the checkout contact field if prompted",
+          data: { email: "{{run.dynamicEmail}}" },
+        },
       ],
       assertions: [
         {
           assertion:
             "The browser navigates to the Shopify checkout page or displays checkout details",
+          video: true, // Records .webm stream for multi-model transient verification
         },
       ],
       onStepStart: (step) => {
@@ -44,7 +51,11 @@ test.describe("Vercel Store - AI Browser Regression Suite (Passmark)", () => {
       onStepEnd: (step) => {
         console.log(`✔ Completed: "${step.description}"`);
       },
-      onReasoning: (reasoning) => {
+      onReasoning: (stepOrReasoning: any) => {
+        const reasoning =
+          typeof stepOrReasoning === "object"
+            ? stepOrReasoning.reasoning
+            : stepOrReasoning;
         console.log(`🤖 [AI Reasoning]: ${reasoning}`);
       },
     });
