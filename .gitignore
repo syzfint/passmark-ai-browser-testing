@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Playwright test artifacts & reports
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# TypeScript build outputs
+dist/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
