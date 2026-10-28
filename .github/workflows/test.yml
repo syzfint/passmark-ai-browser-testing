@@ -50,29 +50,27 @@ jobs:
       - name: Strict TypeScript Compilation
         run: npm run build
 
-      # If API keys are configured in GitHub Secrets, execute live AI tests
-      - name: Execute Live Passmark AI Regression Suite
-        if: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY != '' || secrets.ANTHROPIC_API_KEY != '' }}
+      - name: Execute Passmark AI Test Suite
         env:
           CI: true
           REDIS_URL: redis://localhost:6379
           GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: npx playwright test
-
-      # If secrets are not yet added to GitHub Secrets, complete smoke test and guide user
-      - name: Smoke Check (When Secrets are Pending)
-        if: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY == '' && secrets.ANTHROPIC_API_KEY == '' }}
         run: |
-          echo "=========================================================="
-          echo "ℹ️  AI API Keys not yet populated in GitHub Repository Secrets."
-          echo "✅ TypeScript build check passed cleanly with 0 errors."
-          echo "✅ Redis 7 cache service pinged successfully."
-          echo "👉 To trigger live browser agent runs in CI, add:"
-          echo "   GOOGLE_GENERATIVE_AI_API_KEY or ANTHROPIC_API_KEY"
-          echo "   under Settings -> Secrets and variables -> Actions."
-          echo "=========================================================="
+          if [ -n "$GOOGLE_GENERATIVE_AI_API_KEY" ] || [ -n "$ANTHROPIC_API_KEY" ]; then
+            echo "🚀 Running Passmark AI browser tests..."
+            npx playwright test
+          else
+            echo "=========================================================="
+            echo "ℹ️  AI API Keys not yet populated in GitHub Repository Secrets."
+            echo "✅ Strict TypeScript type-check passed cleanly with 0 errors."
+            echo "✅ Redis 7 Alpine cache service container pinged successfully."
+            echo "👉 To trigger live browser agent runs in CI, add:"
+            echo "   GOOGLE_GENERATIVE_AI_API_KEY or ANTHROPIC_API_KEY"
+            echo "   under Repo Settings -> Secrets and variables -> Actions."
+            echo "=========================================================="
+          fi
 
       - name: Upload Playwright Test Report (if generated)
         if: always()
