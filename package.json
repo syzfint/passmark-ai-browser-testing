@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
+    "test:checkout": "playwright test tests/checkout.spec.ts",
+    "test:heal": "playwright test tests/auto-healing.spec.ts",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
@@ -19,7 +21,8 @@
     "ai-testing",
     "regression-testing",
     "redis-cache",
-    "bug0"
+    "bug0",
+    "auto-healing"
   ],
   "author": "",
   "license": "MIT",

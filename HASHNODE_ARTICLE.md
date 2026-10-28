@@ -34,6 +34,10 @@ To solve this fundamentally for the **Bug0 "Breaking Apps" Hackathon**, we engin
 
 Rather than scraping fragile HTML trees, Passmark decouples test declarations from DOM implementation details through a three-stage architectural pipeline:
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/syzfint/passmark-ai-browser-testing/main/assets/architecture.png" alt="Passmark Architecture Diagram" width="380" />
+</p>
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │             Natural Language Test Declaration               │
